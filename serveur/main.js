@@ -2,6 +2,7 @@ import express from 'express';
 import { createServer } from 'http';
 import dotenv from 'dotenv';
 dotenv.config();
+import fs from 'fs';
 
 import { resolve as resolvePath, dirname } from 'path';
 process.env.__dirname = resolvePath(dirname(''));
@@ -35,26 +36,45 @@ async function getPostData(req) {
  * @param {express.Response} res
  * @param {string} type
  * @param {string} file
+ * @param {number} code default 200
  */
-function sendFile(res, type, file) {
-    res.status(200).contentType(type).sendFile(process.env.__dirname + file);
+function sendFile(res, type, file, status) {
+    res.status(status || 200).contentType(type).sendFile(process.env.__dirname + file);
+}
+
+/**
+ * @param {express.Response} res
+ */
+function send404(res) {
+    sendFile(res, 'text/html', '/web/404.html', 404);
 }
 
 // Public files
 app.use('/favicon.ico', (req, res) => sendFile(res, 'image/x-icon', '/polypote.ico'));
 app.use('/polypote.ico', (req, res) => sendFile(res, 'image/x-icon', '/polypote.ico'));
 app.use('/main.css', (req, res) => sendFile(res, 'text/css', '/web/css/main.css'));
-app.use('/404', (req, res) => sendFile(res, 'text/html', '/web/404.html'));
+app.use('/404', (req, res) => send404(res));
 
-app.use('/', (req, res) => sendFile(res, 'text/html', '/web/index.html'));
-app.use('/web/js/main.js', (req, res) => sendFile(res, 'text/js', '/web/js/main.js'));
-app.use('/web/css/main.css', (req, res) => sendFile(res, 'text/css', '/web/css/main.css'));
+app.use('/js/', (req, res) => sendFile(res, 'text/js', '/web/js/' + req.path));
+app.use('/css/', (req, res) => sendFile(res, 'text/css', '/web/css/' + req.path));
+app.use('/', (req, res, next) => {
+    if (req.path == '/') {
+        sendFile(res, 'text/html', '/web/index.html');
+    } else {
+        const file = '/web/' + req.path + '.html';
+        // vérifier que le fichier existe
+        fs.access(process.env.__dirname + file, fs.constants.F_OK, (err) => {
+            if (err) {
+                next();
+            } else {
+                sendFile(res, 'text/html', file);
+            }
+        });
+    }
+});
 
 // Not found
-app.use((req, res) => {
-    console.log('404 unknow request: ', { url: req.url, method: req.method });
-    res.status(404).contentType('text/html').sendFile(process.env.__dirname + '/web/unknow.html');
-});
+app.use((req, res) => send404(res));
 
 server.listen(PORT);
 var address = server.address();
