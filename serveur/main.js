@@ -37,9 +37,17 @@ async function getPostData(req) {
  * @param {string} type
  * @param {string} file
  * @param {number} code default 200
+ * @param {Function} next
  */
-function sendFile(res, type, file, status) {
-    res.status(status || 200).contentType(type).sendFile(process.env.__dirname + file);
+function sendFile(res, type, file, status, next) {
+    // vérifier que le fichier existe
+    fs.access(process.env.__dirname + file, fs.constants.F_OK, (err) => {
+        if (err) {
+            next();
+        } else {
+            res.status(status || 200).contentType(type).sendFile(process.env.__dirname + file);
+        }
+    });
 }
 
 /**
@@ -61,15 +69,7 @@ app.use('/', (req, res, next) => {
     if (req.path == '/') {
         sendFile(res, 'text/html', '/web/index.html');
     } else {
-        const file = '/web/' + req.path + '.html';
-        // vérifier que le fichier existe
-        fs.access(process.env.__dirname + file, fs.constants.F_OK, (err) => {
-            if (err) {
-                next();
-            } else {
-                sendFile(res, 'text/html', file);
-            }
-        });
+        sendFile(res, 'text/html', '/web/' + req.path + '.html');
     }
 });
 

@@ -2,7 +2,7 @@
 window.addEventListener('load', () => {
 
     // get div
-    const div = document.getElementById('div');
+    const div = document.querySelector('div');
 
     // add mousehover event to change color
     div.addEventListener('mouseover', () => {
@@ -11,8 +11,8 @@ window.addEventListener('load', () => {
 
     // add mouseleave event to change color
     div.addEventListener('mouseleave', () => {
-        div.style.backgroundColor = 'blue';
+        div.style.backgroundColor = '';
     });
 
-
+    console.log('js lancé');
 });
