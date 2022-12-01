@@ -1,0 +1,28 @@
+# https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# https://stackoverflow.com/a/55499182/12908345
+
+BasedOnStyle: Microsoft
+
+IndentWidth: 4
+UseTab: true
+ColumnLimit: 200
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: false
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterExternBlock: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterObjCDeclaration: false
+  AfterStruct: true
+  AfterUnion: false
+  BeforeCatch: true
+  BeforeElse: false
+  IndentBraces: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+
+SortIncludes: false
+ReflowComments: false
