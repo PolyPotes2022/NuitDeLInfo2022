@@ -1,5 +1,7 @@
 import express from 'express';
 import { createServer } from 'http';
+import dotenv from 'dotenv';
+dotenv.config();
 
 import { resolve as resolvePath, dirname } from 'path';
 process.env.__dirname = resolvePath(dirname(''));
