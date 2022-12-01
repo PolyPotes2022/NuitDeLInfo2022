@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { createServer } from 'http';
 
 import { resolve as resolvePath, dirname } from 'path';
@@ -8,7 +8,11 @@ const PORT = parseInt(process.env.PORT || '') || 80;
 const app = express();
 const server = createServer(app);
 
-function getRawPost(req: Request): Promise<string> {
+/**
+ * @param {express.Request} req
+ * @return {Promise<string>}
+ */
+function getRawPost(req) {
     return new Promise((res, rej) => {
         var body = "";
         req.on('data', chunk => body += chunk);
@@ -18,11 +22,19 @@ function getRawPost(req: Request): Promise<string> {
     })
 }
 
-async function getPostData(req: Request) {
+/**
+ * @param {express.Request} req
+ */
+async function getPostData(req) {
     return new URLSearchParams(await getRawPost(req));
 }
 
-function sendFile(res: Response, type: string, file: string) {
+/**
+ * @param {express.Response} res
+ * @param {string} type
+ * @param {string} file
+ */
+function sendFile(res, type, file) {
     res.status(200).contentType(type).sendFile(process.env.__dirname + file);
 }
 

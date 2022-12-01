@@ -3,11 +3,11 @@
     "version": "1.0.0",
     "description": "",
     "main": "build/serveur/main.js",
+    "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "tsc",
-        "start": "node ./build/serveur/main.js",
-        "dev": "ts-node-dev --respawn ./serveur/main.ts"
+        "start": "node ./serveur/main.js",
+        "dev": "node-dev --respawn ./serveur/main.js"
     },
     "repository": {
         "type": "git",
@@ -21,11 +21,5 @@
     "homepage": "https://github.com/PolyPotes2022/NuitDeLInfo2022#readme",
     "dependencies": {
         "express": "^4.18.2"
-    },
-    "devDependencies": {
-        "@types/express": "^4.17.14",
-        "@types/node": "^18.11.10",
-        "ts-node": "^10.9.1",
-        "typescript": "^4.9.3"
     }
 }
