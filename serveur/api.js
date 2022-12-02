@@ -8,6 +8,7 @@ const themes = [
 	'light',
 	'dark',
 ];
+var currentTheme = 0;
 
 function addMessage(message) {
 	derniersMessages.push(message);
@@ -36,22 +37,11 @@ export function registerAPI(app) {
 
 	app.post('/api', (req, res) => {
 		nbRequettes++;
-		const postData = getPostData(req);
-		/**
-		 * @type {string}
-		 */
-		const theme = postData.Chgt_thm;
-		if (theme) {
+		if (req.body === 'Chgt_thm') {
 			// changer le thème
-			addMessage('Changement de thème: ' + theme);
-			
-			if (themes.includes(theme.toLowerCase())) {
-				process.env.CHGT_THM = theme;
-				res.send('Changement de thème validé');
-			}
-			else {
-				res.status(400).send('Thème invalide');
-			}
+			currentTheme = (currentTheme + 1) % themes.length;
+			const theme = themes[currentTheme];
+			res.send('Changement de thème : ' + theme);
 		}
 		else {
 			res.status(400).send('Requête invalide');
