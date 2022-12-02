@@ -2,6 +2,8 @@
 
 Projet réalisé par les PolyPotes pour la nuit de l'info 2022.
 
+Le site est accessible à l'adresse suivante : http://polypotes.alwaysdata.net/
+
 ## Installation
 
 ```bash
