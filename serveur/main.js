@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { resolve as resolvePath, dirname } from 'path';
-import { registerAPI } from './api.js';
+import { getTheme, registerAPI } from './api.js';
 import { sendFile } from './utils.js';
 process.env.__dirname = resolvePath(dirname(''));
 const PORT = parseInt(process.env.PORT || '') || 80;
@@ -25,7 +25,7 @@ app.use('/polypote.ico', (req, res, next) => sendFile(res, 'image/x-icon', '/pol
 app.use('/main.css', (req, res, next) => sendFile(res, 'text/css', '/web/css/main.css', next));
 app.use('/404', (req, res) => send404(res));
 app.use('/theme_custom.css', (req, res, next) => {
-    switch (process.env.CHGT_THM) {
+    switch (getTheme()) {
         case 'dark':
             sendFile(res, 'text/css', '/web/css/theme_dark.css', next);
             break;

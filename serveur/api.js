@@ -1,5 +1,4 @@
 import express from 'express';
-import { getPostData } from './utils.js';
 
 var nbRequettes = 0;
 var derniersMessages = [];
@@ -9,6 +8,9 @@ const themes = [
 	'dark',
 ];
 var currentTheme = 0;
+export function getTheme() {
+	return themes[currentTheme];
+}
 
 function addMessage(message) {
 	derniersMessages.push(message);
