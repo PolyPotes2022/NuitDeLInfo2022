@@ -1,9 +1,12 @@
-div
-{
-	color: red;
-}
 
 h1
 {
+	width: fit-content;
+	margin: auto;
 	color: blue;
+}
+
+div
+{
+	color: red;
 }
