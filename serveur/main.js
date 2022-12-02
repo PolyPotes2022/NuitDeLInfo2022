@@ -50,6 +50,7 @@ registerAPI(app);
 app.use('/js/', (req, res, next) => sendFile(res, 'text/js', '/web/js/' + req.path, next));
 app.use('/css/', (req, res, next) => sendFile(res, 'text/css', '/web/css/' + req.path, next));
 app.use('/images/', (req, res, next) => sendFile(res, 'text/css', '/web/images/' + req.path, next));
+app.use('/ts', (req, res, next) => sendFile(res, 'text/html', '/web/ts/ts.html', next));
 app.use('/', (req, res, next) => {
     if (req.path == '/') {
         sendFile(res, 'text/html', '/web/index.html', next);
