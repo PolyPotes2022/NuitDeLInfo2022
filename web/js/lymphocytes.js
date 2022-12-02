@@ -262,9 +262,6 @@ window.addEventListener('load', () => {
 	setInterval(timeoutActualiser, 50);
 	setInterval(spawnVirus, 5000);
 	updateCanvasSize();
-
-
-	console.log('[Lymphocytes] js lancé');
 });
 
 function updateCanvasSize() {

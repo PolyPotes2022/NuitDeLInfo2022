@@ -14,6 +14,4 @@ window.addEventListener('load', () => {
             div.style.backgroundColor = '';
         });
     }
-
-    console.log('js lancé');
 });
