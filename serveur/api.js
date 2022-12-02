@@ -35,16 +35,11 @@ export function registerAPI(app) {
 		res.send('Nombre de requêtes: ' + nbRequettes + '<br/><br/>Derniers messages:<br/>' + derniersMessages.join('<br/>'));
 	});
 
-	app.post('/api', (req, res) => {
+	app.post('/api/changetheme', (req, res) => {
 		nbRequettes++;
-		if (req.body === 'Chgt_thm') {
-			// changer le thème
-			currentTheme = (currentTheme + 1) % themes.length;
-			const theme = themes[currentTheme];
-			res.send('Changement de thème : ' + theme);
-		}
-		else {
-			res.status(400).send('Requête invalide');
-		}
+		// changer le thème
+		currentTheme = (currentTheme + 1) % themes.length;
+		const theme = themes[currentTheme];
+		res.send('Changement de thème : ' + theme);
 	});
 }
