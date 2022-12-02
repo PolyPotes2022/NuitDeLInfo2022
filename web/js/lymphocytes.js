@@ -1,5 +1,5 @@
-var yMax = 200;
-var xMax = 200;
+var yMax = 500;
+var xMax = 500;
 
 function generateRandomX(width) {
 	return Math.floor(Math.random() * (xMax - width));
@@ -11,8 +11,8 @@ function generateRandomY(height) {
 class Element {
 	x = 0;
 	y = 0;
-	width = 10;
-	height = 10;
+	width = 25;
+	height = 25;
 	t = 0;
 	destination = {
 		x: 0,
@@ -69,8 +69,8 @@ class Lymphocyte extends Element {
 
 	constructor(x, y) {
 		super(x, y);
-		this.width = 20;
-		this.height = 20;
+		this.width = 50;
+		this.height = 50;
 	}
 
 	dessiner() {
@@ -85,6 +85,14 @@ class Lymphocyte extends Element {
 		var offsetX = this.width / 16;
 		var offsetY = this.height / 16;
 		if (this.animerKonami > 0) {
+
+			if (document.documentElement.classList.contains('dark')) {
+				var edmImage = document.getElementById('edmImage');
+				const facteur = 1.5;
+				ctx.drawImage(edmImage, this.x - this.width / 2 * facteur, this.y - this.height / 2 * facteur, this.width * facteur, this.height * facteur);
+				this.animerKonami--;
+				return;
+			}
 			// rotate
 			var angle = Math.PI * 2 * this.animerKonami / 12.5;
 			this.animerKonami--;
@@ -214,7 +222,7 @@ function redesiner() {
 function timeoutActualiser() {
 	var dx = 0;
 	var dy = 0;
-	var vitesse = 1;
+	var vitesse = 3;
 	if (controls.includes('Shift')) vitesse *= 2;
 	if (controls.includes('Control')) vitesse *= 2;
 	if (controls.includes('ArrowUp')) dy -= vitesse;

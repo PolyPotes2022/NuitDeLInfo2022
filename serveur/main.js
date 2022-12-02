@@ -34,6 +34,16 @@ app.use('/theme_custom.css', (req, res, next) => {
             break;
     }
 });
+app.use('/theme.js', (req, res, next) => {
+    switch (getTheme()) {
+        case 'dark':
+            res.send('document.documentElement.classList.add("dark");');
+            break;
+        default:
+            res.send('');
+            break;
+    }
+});
 
 registerAPI(app);
 
