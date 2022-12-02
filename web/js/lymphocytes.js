@@ -28,8 +28,8 @@ class Element {
 	verifierPosition() {
 		if (this.x < this.width / 2) this.x = this.width / 2;
 		if (this.y < this.height / 2) this.y = this.height / 2;
-		if (this.x > xMax - this.width * 3 / 2) this.x = xMax - this.width * 3 / 2;
-		if (this.y > yMax - this.height * 3 / 2) this.y = yMax - this.height * 3 / 2;
+		if (this.x > xMax - this.width / 2) this.x = xMax - this.width / 2;
+		if (this.y > yMax - this.height / 2) this.y = yMax - this.height / 2;
 	}
 	animerPosition() {
 		// déplacement semi aléatoire
@@ -65,19 +65,37 @@ class Element {
 
 class Lymphocyte extends Element {
 	desintegrer = 0;
+	animerKonami = 0;
+
+	constructor(x, y) {
+		super(x, y);
+		this.width = 20;
+		this.height = 20;
+	}
 
 	dessiner() {
-		var x = this.x + this.width / 2;
-		var y = this.y + this.height / 2;
-
 		// dessiner 2 cercles, un blanc et un violet
+
 		ctx.fillStyle = '#c9d3ec';
 		ctx.beginPath();
-		ctx.arc(x, y, this.width, 0, 2 * Math.PI);
+		ctx.arc(this.x, this.y, this.width / 2, 0, 2 * Math.PI);
 		ctx.fill();
 		ctx.fillStyle = '#7e2b91';
 		ctx.beginPath();
-		ctx.arc(x - this.width / 10, y - this.width / 10, this.width * 0.75, 0, 2 * Math.PI);
+		var offsetX = this.width / 16;
+		var offsetY = this.height / 16;
+		if (this.animerKonami > 0) {
+			// rotate
+			var angle = Math.PI * 2 * this.animerKonami / 12.5;
+			this.animerKonami--;
+			var cos = Math.cos(angle);
+			var sin = Math.sin(angle);
+			var tempX = offsetX * cos - offsetY * sin;
+			var tempY = offsetX * sin + offsetY * cos;
+			offsetX = tempX;
+			offsetY = tempY;
+		}
+		ctx.arc(this.x - offsetX, this.y - offsetY, this.width * 3 / 8, 0, 2 * Math.PI);
 		ctx.fill();
 		ctx.globalAlpha = 1;
 	}
@@ -180,7 +198,7 @@ function redesiner() {
 			lymphocytesMourants.splice(i, 1);
 			i--;
 			if (lymphocyteJoueur === lymphocyte) {
-				alert("Vous avez perdu");
+				window.location.replace("../fin");
 			}
 		} else {
 			ctx.globalAlpha = 1 - lymphocyte.desintegrer / 100;
@@ -235,15 +253,43 @@ window.addEventListener('load', () => {
 
 	setInterval(timeoutActualiser, 50);
 	setInterval(spawnVirus, 5000);
+	updateCanvasSize();
 
 
 	console.log('[Lymphocytes] js lancé');
 });
 
+function updateCanvasSize() {
+	const h1 = document.querySelector('h1');
+	const width = window.innerWidth;
+	const height = window.innerHeight - h1.offsetHeight;
+	const min = Math.min(width, height) * 0.8;
+	// redimensionner le canvas avec les variables --game-width et --game-height
+	/**
+	 * @type {HTMLDivElement}
+	 */
+	const game_frame = document.querySelector('#game_frame');
+	if (game_frame) {
+		game_frame.style.setProperty('--game-width', min + 'px');
+		game_frame.style.setProperty('--game-height', min + 'px');
+	}
+}
+
+window.addEventListener('resize', () => updateCanvasSize());
+
+const keySequenceO = 'UUDDLRLRBA'
+var keySequence = '';
+
 window.addEventListener('keydown', (event) => {
 	if (!controls.includes(event.key)) {
 		controls.push(event.key);
 		// démarrer le timer pour déplacer
+	}
+	if (event.key.startsWith('Arrow')) keySequence += event.key[5];
+	else keySequence += event.key[0].toUpperCase();
+	if (keySequence.length > keySequenceO.length) keySequence = keySequence.slice(1);
+	if (keySequence === keySequenceO) {
+		lymphocyteJoueur.animerKonami = 50;
 	}
 });
 

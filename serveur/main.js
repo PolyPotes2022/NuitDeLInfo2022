@@ -20,10 +20,20 @@ function send404(res) {
 }
 
 // Public files
-app.use('/favicon.ico', (req, res, next) => sendFile(res, 'image/x-icon', '/polypote.ico', next));
+app.use('/favicon.ico', (req, res, next) => sendFile(res, 'image/x-icon', '/favicon.ico', next));
 app.use('/polypote.ico', (req, res, next) => sendFile(res, 'image/x-icon', '/polypote.ico', next));
 app.use('/main.css', (req, res, next) => sendFile(res, 'text/css', '/web/css/main.css', next));
 app.use('/404', (req, res) => send404(res));
+app.use('/theme_custom.css', (req, res, next) => {
+    switch (process.env.CHGT_THM) {
+        case 'dark':
+            sendFile(res, 'text/css', '/web/css/theme_dark.css', next);
+            break;
+        default:
+            sendFile(res, 'text/css', '/web/css/main.css', next);
+            break;
+    }
+});
 
 registerAPI(app);
 
